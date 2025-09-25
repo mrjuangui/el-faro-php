@@ -30,8 +30,11 @@ RUN php artisan migrate --force
 # Dar permisos de escritura a storage y bootstrap/cache
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Exponer el puerto 80
-EXPOSE 80
 
-# Comando para iniciar Apache en primer plano
-CMD ["apache2-foreground"]
+
+# Expone el puerto 10000 (o 8080)
+EXPOSE 10000
+
+
+# Define el directorio público como raíz del servidor
+CMD ["php", "-S", "0.0.0.0:10000", "-t", "public"]
