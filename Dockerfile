@@ -1,17 +1,37 @@
-# Imagen base de PHP con Apache
+# Usar PHP 8.2 con Apache
 FROM php:8.2-apache
 
-# Instalar extensiones necesarias para Laravel
-RUN docker-php-ext-install pdo pdo_mysql
+# Instalar dependencias necesarias
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    unzip \
+    git \
+    curl \
+    && docker-php-ext-install pdo pdo_pgsql
 
-# Habilitar mod_rewrite en Apache
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Habilitar mod_rewrite de Apache
 RUN a2enmod rewrite
 
-# Copiar el proyecto al contenedor
+# Copiar todo el proyecto al contenedor
 COPY . /var/www/html
 
-# Ajustar permisos
-RUN chown -R www-data:www-data /var/www/html
+# Establecer directorio de trabajo
+WORKDIR /var/www/html
 
-# Copiar configuración de Apache
-COPY ./apache.conf /etc/apache2/sites-available/000-default.conf
+# Instalar dependencias de PHP
+RUN composer install --no-dev --optimize-autoloader
+
+# Después de composer install
+RUN php artisan migrate --force
+
+# Dar permisos de escritura a storage y bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+# Exponer el puerto 80
+EXPOSE 80
+
+# Comando para iniciar Apache en primer plano
+CMD ["apache2-foreground"]
