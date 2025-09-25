@@ -2,54 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Noticia;
 use Illuminate\Http\Request;
+use App\Models\Noticia;
 
 class NoticiaController extends Controller
 {
-    // Listar todas las noticias
+    // Noticias destacadas para la página de inicio
+    public function destacadas()
+    {
+        $ticker = [
+            'Última hora: Alertan por déficit presupuestario que "pone en riesgo el corazón del plan de emergencia habitacional',
+            'Deportes: El nuevo rol de Alexis Sánchez en el Sevilla y cuándo regresa a La Liga',
+            'Negocios: Gigante china busca tomar el control de Transelec, la mayor empresa de transmisión eléctrica de Chile',
+            'Otros: Mon Laferte recibe dos nominaciones a los Grammy Latinos 2025: Bad Bunny lidera candidaturas con 12'
+        ];
+
+        // Noticias destacadas para el carrusel
+        $destacadas = Noticia::where('destacado', 1)->latest()->take(3)->get();
+
+        // Noticias por categorías
+        $deportes = Noticia::where('categoria', 'deporte')->latest()->take(3)->get();
+        $negocios = Noticia::where('categoria', 'negocios')->latest()->take(3)->get();
+        $otros = Noticia::where('categoria', 'otros')->latest()->take(3)->get();
+
+        return view('index', compact('destacadas', 'deportes', 'negocios', 'otros', 'ticker'));
+    }
+
+    // Listado de todas las noticias
     public function index()
     {
-        return Noticia::with('articulosSecundarios', 'user')->get();
+        $noticias = Noticia::latest()->paginate(9);
+        return view('noticias.index', compact('noticias'));
     }
 
-    // Crear noticia
-    public function store(Request $request)
+    // Mostrar noticia individual
+    public function show($slug)
+{
+    $ticker = [
+            'Última hora: Alertan por déficit presupuestario que "pone en riesgo el corazón del plan de emergencia habitacional',
+            'Deportes: El nuevo rol de Alexis Sánchez en el Sevilla y cuándo regresa a La Liga',
+            'Negocios: Gigante china busca tomar el control de Transelec, la mayor empresa de transmisión eléctrica de Chile',
+            'Otros: Mon Laferte recibe dos nominaciones a los Grammy Latinos 2025: Bad Bunny lidera candidaturas con 12'
+        ];
+    $noticia = Noticia::where('slug', $slug)->firstOrFail();
+    return view('noticias.show', compact('noticia', 'ticker'));
+}
+
+
+    // Noticias filtradas por categoría
+    public function categoria($categoria)
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'contenido' => 'required|string',
-            'imagen' => 'nullable|string',
-            'user_id' => 'required|exists:users,id',
-        ]);
-
-        $noticia = Noticia::create($validated);
-
-        return response()->json($noticia, 201);
-    }
-
-    // Mostrar una noticia
-    public function show($id)
-    {
-        return Noticia::with('articulosSecundarios', 'user')->findOrFail($id);
-    }
-
-    // Actualizar noticia
-    public function update(Request $request, $id)
-    {
-        $noticia = Noticia::findOrFail($id);
-
-        $noticia->update($request->all());
-
-        return response()->json($noticia);
-    }
-
-    // Eliminar noticia
-    public function destroy($id)
-    {
-        $noticia = Noticia::findOrFail($id);
-        $noticia->delete();
-
-        return response()->json(['message' => 'Noticia eliminada']);
+        $noticias = Noticia::where('categoria', $categoria)->latest()->paginate(9);
+        return view('noticias.categoria', compact('noticias', 'categoria'));
     }
 }

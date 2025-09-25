@@ -1,0 +1,165 @@
+/* Variables de colores */
+:root {
+  --color-primario: #00416A;          /* Azul oscuro elegante */
+  --color-secundario: #0072FF;        /* Azul claro brillante */
+  --color-resaltado: #FF9800;         /* Naranja vibrante */
+  --color-fondo: #F9F9FB;             /* Fondo claro */
+  --color-texto: #333333;             /* Texto principal */
+  --color-texto-secundario: #666666;  /* Texto secundario */
+  --color-footer: #1A1A1A;            /* Footer oscuro */
+}
+
+/* General */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--color-primario);
+  font-weight: 600;
+}
+
+
+/* Navbar */
+.navbar {
+  background: linear-gradient(90deg, var(--color-primario), var(--color-secundario));
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+  color: #fff !important;
+}
+
+.navbar-nav .nav-link {
+  color: #fff !important;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--color-resaltado) !important;
+}
+
+/* Carrusel */
+.carousel-item img {
+  height: 420px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.55);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* Noticias (cards) */
+.card {
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(5px);
+  box-shadow: 0px 6px 15px rgba(0,0,0,0.15);
+  border: 1px solid var(--color-secundario);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primario);
+}
+
+.card-text {
+  color: var(--color-texto-secundario);
+}
+
+/* Footer */
+footer {
+  background: var(--color-footer);
+  color: #ccc;
+  padding: 40px 0 20px;
+}
+
+footer h5 {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+footer a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: var(--color-secundario);
+}
+
+footer p {
+  margin: 0;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+
+/* Ajuste visual del ticker */
+.top-bar {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.ticker {
+  white-space: nowrap;
+  animation: tickerMove 25s linear infinite;
+}
+
+.ticker span {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Animación de desplazamiento */
+@keyframes tickerMove {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+section {
+  scroll-margin-top: 80px;
+}
+
+/* Estilo para el reproductor de audio */
+.audio {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+}
+
+.text-carrusel {
+  color: var(--color-primario);
+  transition: color 0.3s ease;
+}
+
+.text-carrusel:hover {
+  color: var(--color-resaltado);
+}
+
+.btn-primary {
+  background-color: var(--color-primario);
+  border: none;
+  transition: background-color 0.3s ease;
+}
+.btn-primary:hover {
+  background-color: var(--color-resaltado);
+}

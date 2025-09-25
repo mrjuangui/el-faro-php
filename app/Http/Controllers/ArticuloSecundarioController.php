@@ -2,48 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ArticuloSecundario;
 use Illuminate\Http\Request;
+use App\Models\ArticuloSecundario;
 
 class ArticuloSecundarioController extends Controller
 {
+    /**
+     * Mostrar listado de artículos secundarios con paginación
+     */
     public function index()
     {
-        return ArticuloSecundario::with('noticia')->get();
+        // Trae todos los artículos secundarios ordenados por fecha, paginados
+        $articulos = ArticuloSecundario::latest()->paginate(9);
+
+        return view('articulos_secundarios.index', compact('articulos'));
     }
 
-    public function store(Request $request)
+    /**
+     * Mostrar un artículo secundario específico
+     */
+    public function show(ArticuloSecundario $articulo)
     {
-        $validated = $request->validate([
-            'titulo' => 'required|string|max:255',
-            'contenido' => 'required|string',
-            'noticia_id' => 'required|exists:noticias,id',
-        ]);
-
-        $articulo = ArticuloSecundario::create($validated);
-
-        return response()->json($articulo, 201);
-    }
-
-    public function show($id)
-    {
-        return ArticuloSecundario::with('noticia')->findOrFail($id);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $articulo = ArticuloSecundario::findOrFail($id);
-
-        $articulo->update($request->all());
-
-        return response()->json($articulo);
-    }
-
-    public function destroy($id)
-    {
-        $articulo = ArticuloSecundario::findOrFail($id);
-        $articulo->delete();
-
-        return response()->json(['message' => 'Artículo eliminado']);
+        return view('articulos_secundarios.show', compact('articulo'));
     }
 }
